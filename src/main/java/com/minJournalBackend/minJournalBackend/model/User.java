@@ -1,24 +1,26 @@
 package com.minJournalBackend.minJournalBackend.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "users")
+import java.util.ArrayList;
+import java.util.List;
+
+@Document(collection = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private String id;
     private String username;
-
     private String password;
 
-    public Long getId() {
+    private List<JournalEntry> journalEntries = new ArrayList<>();
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -36,5 +38,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<JournalEntry> getJournalEntries() {
+        return journalEntries;
+    }
+
+    public void setJournalEntries(List<JournalEntry> journalEntries) {
+        this.journalEntries = journalEntries;
     }
 }

@@ -12,38 +12,45 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServices {
+public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServices(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
+
+    //log in function
+    public UserDto login(LoginDto loginDto) {
+        return userRepository.findByUsername(loginDto.getUsername())
+                .filter(u -> passwordEncoder.matches(loginDto.getPassword(), u.getPassword()))
+                .map(u -> new UserDto(u.getId(), u.getUsername()))
+                .orElse(null);
+    }
+
     //Create new User
-    public UserDto createUser(RegisterUserDto userDto) {
+    public UserDto createUser(LoginDto loginDto) {
+
+        // check if user already exists
+        if (userRepository.findByUsername(loginDto.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+
         User newUser = new User();
-        newUser.setUsername(userDto.getUsername());
-        newUser.setPassword(passwordEncoder.encode(userDto.getPassword())); // password encoder
+        newUser.setUsername(loginDto.getUsername());
+        newUser.setPassword(passwordEncoder.encode(loginDto.getPassword())); // password encoder
         User saved = userRepository.save(newUser);
-        return new UserDto(saved.getUsername(), newUser.getId());
+
+        return new UserDto(saved.getId(), newUser.getUsername());
     }
 
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()  // Stream our User so we only get id and username from our User Object
-                .map(u -> new UserDto(u.getUsername(), u.getId()))
+                .map(u -> new UserDto(u.getId(), u.getUsername()))
                 .collect(Collectors.toList());
     }
 
-    public UserDto login(LoginDto loginDto) {
-        User user = userRepository.findByUsername(loginDto.getUsername())
-                .orElse(null);
-
-        if (user != null && passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
-            return new UserDto(user.getUsername(), user.getId());
-        }
-        return null;
-    }
 }
