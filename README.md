@@ -14,10 +14,12 @@ Backend och frontend ligger i **separata repositories**, så du behöver klona b
 ```bash
 # Klona backend
 git clone https://github.com/S7120f/-Mood-Journal.git
+Öppna mapp i din IDE
 
 # Klona frontend (i en annan mapp)
-git clone https://github.com/<ditt-användarnamn>/<ditt-frontend-repo>.git
-cd ditt-frontend-repo
+git clone https://github.com/S7120f/-Mood-JournalFrontend.git
+Öppna mapp i din IDE
+
 ````
 
 2. Kör backend (Spring Boot)
