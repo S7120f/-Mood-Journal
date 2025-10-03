@@ -13,8 +13,7 @@ Backend och frontend ligger i **separata repositories**, så du behöver klona b
 
 ```bash
 # Klona backend
-git clone https://github.com/<ditt-användarnamn>/<ditt-backend-repo>.git
-cd <ditt-backend-repo>
+git clone https://github.com/S7120f/-Mood-Journal.git
 
 # Klona frontend (i en annan mapp)
 git clone https://github.com/<ditt-användarnamn>/<ditt-frontend-repo>.git
